@@ -11,7 +11,6 @@ from matplotlib import font_manager
 from email.mime.base import MIMEBase
 from email import encoders
 
-
 pdfmetrics.registerFont(TTFont('abibas', 'Abibas.ttf'))
 pdfmetrics.registerFont(TTFont('aloja', 'Aloja.ttf'))
 prop = font_manager.FontProperties(fname='Aloja.ttf')
@@ -68,7 +67,7 @@ def create_visual(ficname):
         bq3 = int(columns_as_lists['top3_biere_quantite'][i])
         email = b3 = columns_as_lists['email'][i]
 
-        pdf_file=f'wrapped_blaze/wrapped_{prenom}_{nom}.pdf'
+        pdf_file=f'wrapped_pdf/wrapped_comif_2024_{prenom}_{nom}.pdf'
         c = canvas.Canvas(pdf_file, pagesize=A4) 
         width, height = A4  #canva PDF A4
         c.drawImage("Background_1.png", 0, 0, width=width, height=height)
