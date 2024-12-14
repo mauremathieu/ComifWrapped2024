@@ -11,3 +11,11 @@ Comif Wrapped 2024 is a Python project that generates personalized PDF reports b
 - Pillow
 - reportlab
 
+## Installation
+
+To install the required packages, run:
+
+```bash
+pip install -r requirements.txt
+```
+

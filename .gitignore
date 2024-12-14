@@ -1,0 +1,12 @@
+# Python specific ignores
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+my_venv/
+env/
+
+# Wrapped exported directories
+wrapped_export/
