@@ -13,15 +13,14 @@ from email import encoders
 import os
 
 pdfmetrics.registerFont(TTFont('stinger', 'fonts\StingerFit-Bold.ttf'))
-#pdfmetrics.registerFont(TTFont('tan', 'tan.ttf'))
-#prop = font_manager.FontProperties(fname='tan.ttf')
+pdfmetrics.registerFont(TTFont('tan', 'fonts\TANHEADLINE.ttf'))
 
 # Fonction pour générer le visuel dans un PDF au format A4
 def create_visual(ficname):
     df = pd.read_excel(ficname)  # data loading
     columns_as_lists = {column: df[column].tolist() for column in df.columns}
     print(f"Colonnes disponibles : {df.columns}")  # check nom de colonne
-    for i in range(3):
+    for i in range(1):
         nom = columns_as_lists['nom'][i]  # création de variable
         prenom = columns_as_lists['prenom'][i]
         top_conso = columns_as_lists['top1_produit'][i]
