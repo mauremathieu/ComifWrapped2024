@@ -23,10 +23,12 @@ pdfmetrics.registerFont(TTFont('tan', 'fonts/TANHEADLINE.ttf'))
 def send_email(to_email, pdf_file, prenom, nom, solde):
     from_email = "comif13120@gmail.com"
     subject = "Ton Comif Wrapped 2024 !"
-    body = f"Bonjour {prenom} {nom},\n\nVoici ton Comif Wrapped 2024. En te souhaitant de bonne fête de fin d'année.\n\n"
+    prenom = prenom.capitalize()
+    nom = nom.capitalize()
+    body = f"Bonjour {prenom} {nom},\n\nVoici ton Comif Wrapped 2024 ! En te souhaitant de bonne fête de fin d'année.\n\n"
     if solde < 0:
-        body += f"\n\nAttention, ton solde est négatif: {solde}. Merci de bien vouloir régulariser ta situation. Voici l'IBAN de la Comif: FR7630004007020001006208160. Envoie nous un message si tu fait un virement pour qu'on puisse le valider.\n\n"
-    body += "A bientôt, \nComif is Love, Comif is Life"
+        body += f"Attention, ton solde est négatif: {solde}€. Merci de bien vouloir régulariser ta situation au plus vite auprès de nos serveurs !\nIBAN de la Comif: FR7630004007020001006208160. Envoie nous un message si tu fait un virement pour qu'on puisse le valider.\n\n"
+    body += "A bientôt, \n\nComif is Love, Comif is Life"
 
     msg = MIMEMultipart()
     msg['From'] = from_email
@@ -59,10 +61,10 @@ def create_visual(ficname):
     team_titpause = f"{100 - team_tibbar}%"
     team_tibbar = f"{team_tibbar}%"
     
-    for i in range(5):
+    for i in range(len(columns_as_lists['nom'])):
         nom = columns_as_lists['nom'][i].upper()
         prenom = columns_as_lists['prenom'][i].upper()
-        solde = f"{int(columns_as_lists['solde'][i] / 100)}€"
+        solde = int(columns_as_lists['solde'][i] / 100)
         top_conso = columns_as_lists['top1_produit'][i].upper()
         top_qtte = int(columns_as_lists['top1_quantite'][i])
         place = columns_as_lists['favorite_place'][i].upper()
