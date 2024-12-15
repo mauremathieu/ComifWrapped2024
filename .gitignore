@@ -10,3 +10,5 @@ env/
 
 # Wrapped exported directories
 wrapped_export/
+
+password.py

@@ -11,10 +11,44 @@ from matplotlib import font_manager
 from email.mime.base import MIMEBase
 from email import encoders
 import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+from password import password
 
 pdfmetrics.registerFont(TTFont('stinger', 'fonts/StingerFit-Bold.ttf'))
 pdfmetrics.registerFont(TTFont('tan', 'fonts/TANHEADLINE.ttf'))
 
+def send_email(to_email, pdf_file, prenom, nom, solde):
+    from_email = "comif13120@gmail.com"
+    subject = "Ton Comif Wrapped 2024 !"
+    body = f"Bonjour {prenom} {nom},\n\nVoici ton Comif Wrapped 2024. En te souhaitant de bonne fête de fin d'année.\n\n"
+    if solde < 0:
+        body += f"\n\nAttention, ton solde est négatif: {solde}. Merci de bien vouloir régulariser ta situation. Voici l'IBAN de la Comif: FR7630004007020001006208160. Envoie nous un message si tu fait un virement pour qu'on puisse le valider.\n\n"
+    body += "A bientôt, \nComif is Love, Comif is Life"
+
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    with open(pdf_file, "rb") as f:
+        part = MIMEApplication(f.read(), Name=os.path.basename(pdf_file))
+        part['Content-Disposition'] = f'attachment; filename="{os.path.basename(pdf_file)}"'
+        msg.attach(part)
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(from_email, password) # password is imported from password.py
+        server.sendmail(from_email, to_email, msg.as_string())
+        server.quit()
+        print(f"Email sent to {to_email}")
+    except Exception as e:
+        print(f"Failed to send email to {to_email}: {e}")
 
 def create_visual(ficname):
     df = pd.read_excel(ficname)  # data loading
@@ -28,6 +62,7 @@ def create_visual(ficname):
     for i in range(5):
         nom = columns_as_lists['nom'][i].upper()
         prenom = columns_as_lists['prenom'][i].upper()
+        solde = f"{int(columns_as_lists['solde'][i] / 100)}€"
         top_conso = columns_as_lists['top1_produit'][i].upper()
         top_qtte = int(columns_as_lists['top1_quantite'][i])
         place = columns_as_lists['favorite_place'][i].upper()
@@ -155,9 +190,10 @@ def create_visual(ficname):
         c.drawString(505, 128, f"{bq3}")     
 
         c.save() 
-
         print(f"PDF {pdf_file} created")
+        send_email(email, pdf_file, prenom, nom, solde)
+        print(f"PDF {pdf_file} sended to {email}")
 
 # Exécution de la création du visuel
 if __name__ == "__main__":
-    create_visual("data_comif_wrapped.xlsx")
+    create_visual("data_comif_wrapped_test.xlsx")
