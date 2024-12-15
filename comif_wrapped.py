@@ -16,13 +16,14 @@ pdfmetrics.registerFont(TTFont('stinger', 'fonts/StingerFit-Bold.ttf'))
 pdfmetrics.registerFont(TTFont('tan', 'fonts/TANHEADLINE.ttf'))
 
 
-
 def create_visual(ficname):
     df = pd.read_excel(ficname)  # data loading
     columns_as_lists = {column: df[column].tolist() for column in df.columns}
 
     team_tibbar = (df['favorite_place'].str.contains('Tibbar').sum() / len(df)) * 100
-    team_titpause = 100 - team_tibbar
+    team_tibbar = int(team_tibbar)
+    team_titpause = f"{100 - team_tibbar}%"
+    team_tibbar = f"{team_tibbar}%"
     
     for i in range(5):
         nom = columns_as_lists['nom'][i].upper()
@@ -34,6 +35,10 @@ def create_visual(ficname):
         top2_qtte = int(columns_as_lists['top2_quantite'][i])
         top3 = columns_as_lists['top3_produit'][i].upper()
         top3_qtte = int(columns_as_lists['top3_quantite'][i])
+        top4 = columns_as_lists['top4_produit'][i].upper()
+        top4_qtte = int(columns_as_lists['top4_quantite'][i])
+        top5 = columns_as_lists['top5_produit'][i].upper()
+        top5_qtte = int(columns_as_lists['top5_quantite'][i])
         position_alcool = int(columns_as_lists['rang_alcool'][i])
         money = f"{int(columns_as_lists['total_depense'][i] / 100)}€"
         position_depense = int(columns_as_lists['rang_consommateur'][i])
@@ -76,39 +81,80 @@ def create_visual(ficname):
         #top buveur
         c.setFillColor(HexColor(0xfae8c4)) # beige
         c.setFont("tan", 37)
-        c.drawString(415, height - 460, f"{position_alcool}")
+        c.drawString(415, height - 457, f"{position_alcool}")
 
 
         #favourite place
         c.setFillColor(HexColor(0x282828))  # noir
         c.setFont("tan", 30)
-        c.drawString(370, 300, f"{place}")  # X = 25cm, Y = 36cm
+        c.drawString(359, 288, f"{place}") 
         c.setFont("stinger", 18)
         if place == "TIBBAR":
-            c.drawString(320, 300, f"{team_tibbar}")
-            c.drawImage("visual/beer.png", 370, 300, width=50, height=50)
+            c.drawString(207, 288, f"{team_tibbar}")
+            c.drawImage("visual/beer.png", 495, 275, width=45, height=45)
         elif place == "TITPAUSE":
-            c.drawString(320, 300, f"{team_titpause}")
-            c.drawImage("visual/beer.png", 370, 300, width=50, height=50)
+            c.drawString(207, 288, f"{team_titpause}")
+            c.drawImage("visual/croissant.jpg", 540, 275, width=45, height=45)
         else:
             raise ValueError(f"Place {place} not recognized")
 
 
         #top consommation
         c.setFillColor(HexColor(0xfae8c4)) # beige
-        c.setFont("tan", 20)
-        c.drawString(40, height - 465, f"{top_conso}")
-        c.drawString(40, height - 465, f"{top_qtte}")
+        c.setFont("tan", 13)
+        if len(top_conso) > 17:
+            c.setFont("tan", 8)
+        c.drawString(70, 160, f"{top_conso}")
+        c.setFont("tan", 13)
+        c.drawString(250, 160, f"{top_qtte}")
+
+        if len(top2) > 17:
+            c.setFont("tan", 8)
+        c.drawString(70, 130, f"{top2}")
+        c.setFont("tan", 13)
+        c.drawString(250, 130, f"{top2_qtte}")
+
+        if len(top3) > 17:
+            c.setFont("tan", 8)
+        c.drawString(70, 100, f"{top3}")
+        c.setFont("tan", 13)
+        c.drawString(250, 100, f"{top3_qtte}")
+
+        if len(top4) > 17:
+            c.setFont("tan", 8)
+        c.drawString(70, 70, f"{top4}")
+        c.setFont("tan", 13)
+        c.drawString(250, 70, f"{top4_qtte}")
+
+        if len(top5) > 17:
+            c.setFont("tan", 8)
+        c.drawString(70, 40, f"{top5}")
+        c.setFont("tan", 13)
+        c.drawString(250, 40, f"{top5_qtte}")
         
         
         #top biere
         c.setFillColor(HexColor(0xfae8c4)) # beige
-        c.setFont("tan", 15)
-        c.drawString(40, height - 465, f"{b1}")
-        c.drawString(40, height - 465, f"{bq1}")        
-
+        c.setFont("tan", 14)
+        if len(b1) > 17:
+            c.setFont("tan", 10)
+        c.drawString(298, 188, f"{b1}")
+        c.setFont("tan", 14)
+        c.drawString(505, 188, f"{bq1}")  
         
-        c.save()  # sauvegarde
+        if len(b2) > 17:
+            c.setFont("tan", 10)
+        c.drawString(298, 158, f"{b2}")
+        c.setFont("tan", 14)
+        c.drawString(505, 158, f"{bq2}") 
+        
+        if len(b3) > 17:
+            c.setFont("tan", 10)
+        c.drawString(298, 128, f"{b3}")
+        c.setFont("tan", 14)
+        c.drawString(505, 128, f"{bq3}")     
+
+        c.save() 
 
         print(f"PDF {pdf_file} created")
 
