@@ -27,7 +27,7 @@ def send_email(to_email, pdf_file, prenom, nom, solde):
     nom = nom.capitalize()
     body = f"Bonjour {prenom} {nom},\n\nVoici ton Comif Wrapped 2024 ! En te souhaitant de bonne fête de fin d'année.\n\n"
     if solde < 0:
-        body += f"Attention, ton solde est négatif: {solde}€. Merci de bien vouloir régulariser ta situation au plus vite auprès de nos serveurs !\nIBAN de la Comif: FR7630004007020001006208160. Envoie nous un message si tu fait un virement pour qu'on puisse le valider.\n\n"
+        body += f"En revanche, ton solde est négatif: {solde}€. Merci de bien vouloir régulariser ta situation au plus vite auprès de nos serveurs !\nIBAN de la Comif: FR7630004007020001006208160. Envoie nous un message si tu fait un virement pour qu'on puisse le valider.\n\n"
     body += "A bientôt, \n\nComif is Love, Comif is Life"
 
     msg = MIMEMultipart()
@@ -65,26 +65,34 @@ def create_visual(ficname):
         nom = columns_as_lists['nom'][i].upper()
         prenom = columns_as_lists['prenom'][i].upper()
         solde = int(columns_as_lists['solde'][i] / 100)
-        top_conso = columns_as_lists['top1_produit'][i].upper()
-        top_qtte = int(columns_as_lists['top1_quantite'][i])
+        top_conso = columns_as_lists['top1_produit'][i]
+        top_conso = top_conso.upper() if pd.notna(top_conso) else "N/A"
+        top_qtte = int(columns_as_lists['top1_quantite'][i]) if pd.notna(columns_as_lists['top1_quantite'][i]) else 0
         place = columns_as_lists['favorite_place'][i].upper()
-        top2 = columns_as_lists['top2_produit'][i].upper()
-        top2_qtte = int(columns_as_lists['top2_quantite'][i])
-        top3 = columns_as_lists['top3_produit'][i].upper()
-        top3_qtte = int(columns_as_lists['top3_quantite'][i])
-        top4 = columns_as_lists['top4_produit'][i].upper()
-        top4_qtte = int(columns_as_lists['top4_quantite'][i])
-        top5 = columns_as_lists['top5_produit'][i].upper()
-        top5_qtte = int(columns_as_lists['top5_quantite'][i])
-        position_alcool = int(columns_as_lists['rang_alcool'][i])
+        top2 = columns_as_lists['top2_produit'][i]
+        top2 = top2.upper() if pd.notna(top2) else "N/A"
+        top2_qtte = int(columns_as_lists['top2_quantite'][i]) if pd.notna(columns_as_lists['top2_quantite'][i]) else 0
+        top3 = columns_as_lists['top3_produit'][i]
+        top3 = top3.upper() if pd.notna(top3) else "N/A"
+        top3_qtte = int(columns_as_lists['top3_quantite'][i]) if pd.notna(columns_as_lists['top3_quantite'][i]) else 0
+        top4 = columns_as_lists['top4_produit'][i]
+        top4 = top4.upper() if pd.notna(top4) else "N/A"
+        top4_qtte = int(columns_as_lists['top4_quantite'][i]) if pd.notna(columns_as_lists['top4_quantite'][i]) else 0
+        top5 = columns_as_lists['top5_produit'][i]
+        top5 = top5.upper() if pd.notna(top5) else "N/A"
+        top5_qtte = int(columns_as_lists['top5_quantite'][i]) if pd.notna(columns_as_lists['top5_quantite'][i]) else 0
+        position_alcool = int(columns_as_lists['rang_alcool'][i]) if pd.notna(columns_as_lists['rang_alcool'][i]) else 295
         money = f"{int(columns_as_lists['total_depense'][i] / 100)}€"
         position_depense = int(columns_as_lists['rang_consommateur'][i])
-        b1 = columns_as_lists['top1_biere'][i].upper()
-        b2 = columns_as_lists['top2_biere'][i].upper()
-        b3 = columns_as_lists['top3_biere'][i].upper()
-        bq1 = int(columns_as_lists['top1_biere_quantite'][i])
-        bq2 = int(columns_as_lists['top2_biere_quantite'][i])
-        bq3 = int(columns_as_lists['top3_biere_quantite'][i])
+        b1 = columns_as_lists['top1_biere'][i]
+        b1 = b1.upper() if pd.notna(b1) else "N/A"
+        b2 = columns_as_lists['top2_biere'][i]
+        b2 = b2.upper() if pd.notna(b2) else "N/A"
+        b3 = columns_as_lists['top3_biere'][i]
+        b3 = b3.upper() if pd.notna(b3) else "N/A"
+        bq1 = int(columns_as_lists['top1_biere_quantite'][i]) if pd.notna(columns_as_lists['top1_biere_quantite'][i]) else 0
+        bq2 = int(columns_as_lists['top2_biere_quantite'][i]) if pd.notna(columns_as_lists['top2_biere_quantite'][i]) else 0
+        bq3 = int(columns_as_lists['top3_biere_quantite'][i]) if pd.notna(columns_as_lists['top3_biere_quantite'][i]) else 0
         email = columns_as_lists['email'][i]
 
         pdf_file = f'wrapped_export/wrapped_comif_2024_{prenom}_{nom}.pdf'
@@ -139,32 +147,32 @@ def create_visual(ficname):
         #top consommation
         c.setFillColor(HexColor(0xfae8c4)) # beige
         c.setFont("tan", 13)
-        if len(top_conso) > 17:
-            c.setFont("tan", 8)
+        if len(top_conso) > 16:
+            c.setFont("tan", 😎
         c.drawString(70, 160, f"{top_conso}")
         c.setFont("tan", 13)
         c.drawString(250, 160, f"{top_qtte}")
 
-        if len(top2) > 17:
-            c.setFont("tan", 8)
+        if len(top2) > 16:
+            c.setFont("tan", 😎
         c.drawString(70, 130, f"{top2}")
         c.setFont("tan", 13)
         c.drawString(250, 130, f"{top2_qtte}")
 
-        if len(top3) > 17:
-            c.setFont("tan", 8)
+        if len(top3) > 16:
+            c.setFont("tan", 😎
         c.drawString(70, 100, f"{top3}")
         c.setFont("tan", 13)
         c.drawString(250, 100, f"{top3_qtte}")
 
-        if len(top4) > 17:
-            c.setFont("tan", 8)
+        if len(top4) > 16:
+            c.setFont("tan", 😎
         c.drawString(70, 70, f"{top4}")
         c.setFont("tan", 13)
         c.drawString(250, 70, f"{top4_qtte}")
 
-        if len(top5) > 17:
-            c.setFont("tan", 8)
+        if len(top5) > 16:
+            c.setFont("tan", 😎
         c.drawString(70, 40, f"{top5}")
         c.setFont("tan", 13)
         c.drawString(250, 40, f"{top5_qtte}")
@@ -194,8 +202,7 @@ def create_visual(ficname):
         c.save() 
         print(f"PDF {pdf_file} created")
         send_email(email, pdf_file, prenom, nom, solde)
-        print(f"PDF {pdf_file} sended to {email}")
 
 # Exécution de la création du visuel
-if __name__ == "__main__":
-    create_visual("data_comif_wrapped_test.xlsx")
+if _name_ == "_main_":
+    create_visual("data_comif_wrapped.xlsx")
